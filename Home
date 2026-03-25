@@ -1,0 +1,260 @@
+import React from 'react';
+import { 
+  StyleSheet, 
+  Text, 
+  View, 
+  ScrollView, 
+  Image, 
+  TouchableOpacity, 
+  TextInput,
+  SafeAreaView 
+} from 'react-native';
+import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
+
+export default function App() {
+  const categories = [
+    { id: '1', name: 'Burguers', icon: 'food-hamburger' },
+    { id: '2', name: 'Salgados', icon: 'food-croissant' },
+    { id: '3', name: 'Bebidas', icon: 'cup-water' },
+    { id: '4', name: 'Combos', icon: 'food-hot-dog' },
+  ];
+
+  return (
+    <SafeAreaView style={styles.container}>
+      {/* Header */}
+      <View style={styles.header}>
+        <View>
+          <Text style={styles.welcomeText}>Bem-vindo à</Text>
+          <Text style={styles.brandName}>Lanchonete Delícia 🍔</Text>
+        </View>
+        <TouchableOpacity style={styles.cartBadge}>
+          <Feather name="shopping-cart" size={24} color="#FF6B00" />
+          <View style={styles.dot} />
+        </TouchableOpacity>
+      </View>
+
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {/* Barra de Pesquisa */}
+        <View style={styles.searchContainer}>
+          <Feather name="search" size={20} color="#999" />
+          <TextInput 
+            placeholder="O que você quer comer hoje?" 
+            style={styles.searchInput}
+          />
+        </View>
+
+        {/* Banner de Promoção */}
+        <View style={styles.promoBanner}>
+          <View style={styles.promoTextContainer}>
+            <Text style={styles.promoTitle}>Combo Família</Text>
+            <Text style={styles.promoSubtitle}>Ganhe 20% de desconto na primeira compra!</Text>
+            <TouchableOpacity style={styles.promoButton}>
+            
+              <Text style={styles.promoButtonText}>Pedir Agora</Text>
+            </TouchableOpacity>
+          </View>
+          <Image 
+            source={{ uri: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=200' }} 
+            style={styles.promoImage}
+          />
+        </View>
+        
+
+        {/* Categorias */}
+        <Text style={styles.sectionTitle}>Categorias</Text>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.categoriesList}>
+          {categories.map((cat) => (
+            <TouchableOpacity key={cat.id} style={styles.categoryCard}>
+              <MaterialCommunityIcons name={cat.icon} size={30} color="#FF6B00" />
+              <Text style={styles.categoryText}>{cat.name}</Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+        <Text style={styles.sectionTitle}>Destaques da Casa</Text>
+        <View style={styles.productCard}>
+          <Image 
+            source={{ uri: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=300' }} 
+            style={styles.productImage}
+          />
+          <View style={styles.productInfo}>
+            <Text style={styles.productName}>X-Delícia Bacon</Text>
+            <Text style={styles.productDesc}>Pão artesanal, blend 180g, queijo duplo e bacon crocante.</Text>
+            <View style={styles.priceRow}>
+              <Text style={styles.productPrice}>R$ 34,90</Text>
+              <TouchableOpacity style={styles.addButton}>
+                <Feather name="plus" size={20} color="#FFF" />
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+
+        {/* Mais Pedidos */}
+   
+        <View style={styles.productCard}>
+          <Image 
+            source={{ uri: 'https://houseburguer.venew.com.br/_core/_uploads//2024/10/19271410249cf0kef4kg.jpg' }} 
+            style={styles.productImage}
+          />
+          <View style={styles.productInfo}>
+            <Text style={styles.productName}>Porção de Batata com Bacon</Text>
+            <Text style={styles.productDesc}>Batata Frita + Cheddar e bacon crocante.</Text>
+            <View style={styles.priceRow}>
+              <Text style={styles.productPrice}>R$ 25,90</Text>
+              <TouchableOpacity style={styles.addButton}>
+                <Feather name="plus" size={20} color="#FFF" />
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+
+         <View style={styles.productCard}>
+          <Image 
+            source={{ uri: 'https://www.minhasreceitas.blog.br/wp-content/uploads/2022/05/Frango-Empanado-na-Airfryer.jpg' }} 
+            style={styles.productImage}
+          />
+          <View style={styles.productInfo}>
+            <Text style={styles.productName}>Porção De Frango Crocante</Text>
+            <Text style={styles.productDesc}>Frango crocante + Batata Frita + nuggets </Text>
+            <View style={styles.priceRow}>
+              <Text style={styles.productPrice}>R$ 35,90</Text>
+              <TouchableOpacity style={styles.addButton}>
+                <Feather name="plus" size={20} color="#FFF" />
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+
+          <View style={styles.productCard}>
+          <Image 
+            source={{ uri: 'https://ariztia.com/wp-content/uploads/2023/11/nuggets-de-pollo-caseros.jpg' }} 
+            style={styles.productImage}
+          />
+          <View style={styles.productInfo}>
+            <Text style={styles.productName}>Porção De Nuggets</Text>
+            <Text style={styles.productDesc}> Nuggets Crocantes </Text>
+            <View style={styles.priceRow}>
+              <Text style={styles.productPrice}>R$ 25,90</Text>
+              <TouchableOpacity style={styles.addButton}>
+                <Feather name="plus" size={20} color="#FFF" />
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+
+          <View style={styles.productCard}>
+          <Image 
+            source={{ uri: 'https://instadelivery-public.nyc3.cdn.digitaloceanspaces.com/groups/1716481378664f6d626b586.jpeg' }} 
+            style={styles.productImage}
+          />
+          <View style={styles.productInfo}>
+            <Text style={styles.productName}>Combo X</Text>
+            <Text style={styles.productDesc}> Pão artesanal, blend 200g, queijo duplo , cebola , alface , tomate e bacon crocante + Batata Frita + Coca Cola </Text>
+            <View style={styles.priceRow}>
+              <Text style={styles.productPrice}>R$ 35,90</Text>
+              <TouchableOpacity style={styles.addButton}>
+                <Feather name="plus" size={20} color="#FFF" />
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+
+                  <View style={styles.productCard}>
+          <Image 
+            source={{ uri: 'https://soubh.uai.com.br/wp-content/uploads/2025/02/309956-como-oferecer-os-melhores-sabores-de-milkshake-para-os-clientes.jpg' }} 
+            style={styles.productImage}
+          />
+          <View style={styles.productInfo}>
+            <Text style={styles.productName}>Milk Shake</Text>
+            <Text style={styles.productDesc}> Milk Shake de Ovomaltine </Text>
+            <View style={styles.priceRow}>
+              <Text style={styles.productPrice}>R$ 25,90</Text>
+              <TouchableOpacity style={styles.addButton}>
+                <Feather name="plus" size={20} color="#FFF" />
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+
+      </ScrollView>
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: '#F8F9FA' },
+  header: {
+    paddingHorizontal: 20,
+    paddingTop: 40,
+    paddingBottom: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#FFF'
+  },
+  welcomeText: { fontSize: 14, color: '#666' },
+  brandName: { fontSize: 22, fontWeight: 'bold', color: '#333' },
+  cartBadge: { padding: 8, backgroundColor: '#FFF0E6', borderRadius: 12 },
+  dot: { 
+    position: 'absolute', top: 8, right: 8, 
+    width: 10, height: 10, backgroundColor: 'red', 
+    borderRadius: 5, borderWidth: 2, borderColor: '#FFF' 
+  },
+  searchContainer: {
+    flexDirection: 'row',
+    backgroundColor: '#EEE',
+    margin: 20,
+    padding: 12,
+    borderRadius: 15,
+    alignItems: 'center'
+  },
+  searchInput: { marginLeft: 10, flex: 1, fontSize: 16 },
+  promoBanner: {
+    backgroundColor: '#FF6B00',
+    marginHorizontal: 20,
+    borderRadius: 20,
+    padding: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    overflow: 'hidden'
+  },
+  promoTextContainer: { flex: 1 },
+  promoTitle: { color: '#FFF', fontSize: 20, fontWeight: 'bold' },
+  promoSubtitle: { color: '#FFD1B3', fontSize: 12, marginVertical: 8 },
+  promoButton: { backgroundColor: '#FFF', paddingVertical: 6, borderRadius: 8, alignItems: 'center', width: 100 },
+  promoButtonText: { color: '#FF6B00', fontWeight: 'bold', fontSize: 12 },
+  promoImage: { width: 100, height: 100, borderRadius: 50, right: -10 },
+  sectionTitle: { fontSize: 18, fontWeight: 'bold', margin: 20, marginBottom: 10 },
+  categoriesList: { paddingLeft: 20 },
+  categoryCard: {
+    backgroundColor: '#FFF',
+    padding: 15,
+    borderRadius: 20,
+    alignItems: 'center',
+    marginRight: 15,
+    width: 90,
+    elevation: 2,
+    shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 4,
+  },
+  categoryText: { fontSize: 12, marginTop: 8, fontWeight: '600', color: '#555' },
+  productCard: {
+    backgroundColor: '#FFF',
+    marginHorizontal: 20,
+    borderRadius: 20,
+    overflow: 'hidden',
+    marginBottom: 100,
+    elevation: 3,
+  },
+  productImage: { width: '100%', height: 180 },
+  productInfo: { padding: 15 },
+  productName: { fontSize: 18, fontWeight: 'bold' },
+  productDesc: { color: '#888', fontSize: 13, marginVertical: 5 },
+  priceRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 },
+  productPrice: { fontSize: 20, fontWeight: 'bold', color: '#27AE60' },
+  addButton: { backgroundColor: '#FF6B00', padding: 10, borderRadius: 12 },
+  tabBar: {
+    position: 'absolute', bottom: 0, left: 0, right: 0,
+    height: 70, backgroundColor: '#FFF',
+    flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center',
+    borderTopWidth: 1, borderTopColor: '#EEE'
+  }
+});
