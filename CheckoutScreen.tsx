@@ -68,13 +68,6 @@ export default function CheckoutScreen({ route, navigation }) {
                   style={styles.qrImage}
                 />
                 
-                <TouchableOpacity 
-                  activeOpacity={0.7}
-                  style={styles.doneButton} 
-                  onPress={handleFinalizar}
-                >
-                  <Text style={styles.doneButtonText}>JÁ PAGUEI</Text>
-                </TouchableOpacity>
               </View>
             )}
           </View>
