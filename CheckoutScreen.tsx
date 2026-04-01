@@ -7,7 +7,7 @@ import {
   Image, 
   Alert, 
   FlatList,
-  ScrollView,
+  TextInput, // Importado para os campos de texto
   Dimensions 
 } from 'react-native';
 
@@ -15,8 +15,12 @@ const { width } = Dimensions.get('window');
 
 export default function CheckoutScreen({ route, navigation }) {
   const [showPix, setShowPix] = useState(false);
+  
+  // Estados para o cadastro do cliente
+  const [nome, setNome] = useState('');
+  const [telefone, setTelefone] = useState('');
+  const [endereco, setEndereco] = useState('');
 
-  // Pega os itens ou cria um array vazio se der erro
   const items = route.params?.items || [];
   const selectedItems = items.filter(item => item.qty > 0);
   
@@ -25,12 +29,13 @@ export default function CheckoutScreen({ route, navigation }) {
     0
   );
 
-  const handleFinalizar = () => {
-    Alert.alert(
-      "Pedido Confirmado",
-      "Recebemos seu pagamento! Voltando ao início...",
-      [{ text: "OK", onPress: () => navigation.navigate('Home') }]
-    );
+  const handlePagarPix = () => {
+    // Validação funcional: impede abrir o PIX sem os dados de entrega
+    if (!nome || !telefone || !endereco) {
+      Alert.alert("Campos Obrigatórios", "Por favor, preencha seus dados para entrega antes de pagar.");
+      return;
+    }
+    setShowPix(!showPix);
   };
 
   return (
@@ -38,7 +43,36 @@ export default function CheckoutScreen({ route, navigation }) {
       <FlatList
         data={selectedItems}
         keyExtractor={(item, index) => index.toString()}
-        ListHeaderComponent={<Text style={styles.title}>Resumo do Pedido</Text>}
+        ListHeaderComponent={
+          <View>
+            <Text style={styles.title}>Resumo do Pedido</Text>
+            
+            {/* Seção de Cadastro */}
+            <View style={styles.cadastroContainer}>
+              <Text style={styles.label}>Dados para Entrega</Text>
+              <TextInput 
+                style={styles.input}
+                placeholder="Seu nome completo"
+                value={nome}
+                onChangeText={setNome}
+              />
+              <TextInput 
+                style={styles.input}
+                placeholder="Telefone (WhatsApp)"
+                keyboardType="phone-pad"
+                value={telefone}
+                onChangeText={setTelefone}
+              />
+              <TextInput 
+                style={[styles.input, styles.inputEndereco]}
+                placeholder="Endereço completo (Rua, Nº, Bairro)"
+                multiline
+                value={endereco}
+                onChangeText={setEndereco}
+              />
+            </View>
+          </View>
+        }
         renderItem={({ item }) => (
           <View style={styles.itemRow}>
             <Text style={styles.itemText}>{item.name} x{item.qty}</Text>
@@ -46,15 +80,14 @@ export default function CheckoutScreen({ route, navigation }) {
           </View>
         )}
         ListEmptyComponent={<Text style={styles.emptyText}>Carrinho vazio</Text>}
-        // Colocamos os botões e o total aqui para garantir que fiquem no final da lista
         ListFooterComponent={
           <View style={styles.footer}>
             <Text style={styles.totalText}>Total: R$ {total.toFixed(2)}</Text>
 
             <TouchableOpacity 
               activeOpacity={0.7}
-              style={styles.pixButton} 
-              onPress={() => setShowPix(!showPix)}
+              style={[styles.pixButton, (!nome || !telefone || !endereco) && styles.pixButtonDisabled]} 
+              onPress={handlePagarPix}
             >
               <Text style={styles.pixButtonText}>
                 {showPix ? "FECHAR QR CODE" : "PAGAR COM PIX"}
@@ -63,11 +96,12 @@ export default function CheckoutScreen({ route, navigation }) {
 
             {showPix && (
               <View style={styles.qrSection}>
+                <Text style={styles.qrInfo}>Aguardando pagamento de {nome.split(' ')[0]}...</Text>
                 <Image 
-                  source={{ uri: 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=PIX_PAGAMENTO' }} 
+                  source={{ uri: 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=PIX_PAGAMENTO_AGNELLO' }} 
                   style={styles.qrImage}
                 />
-                
+                <Text style={styles.enderecoEntrega}>Entrega em: {endereco}</Text>
               </View>
             )}
           </View>
@@ -90,6 +124,31 @@ const styles = StyleSheet.create({
     color: '#333',
     textAlign: 'center'
   },
+  cadastroContainer: {
+    marginBottom: 20,
+    backgroundColor: '#f8f9fa',
+    padding: 15,
+    borderRadius: 15,
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    color: '#FF6B00',
+  },
+  input: {
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 10,
+    fontSize: 14,
+  },
+  inputEndereco: {
+    height: 60,
+    textAlignVertical: 'top',
+  },
   itemRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -102,7 +161,7 @@ const styles = StyleSheet.create({
   emptyText: { textAlign: 'center', marginTop: 50, color: '#999' },
   footer: {
     marginTop: 20,
-    paddingBottom: 40 // Espaço para não bater na barra de abas
+    paddingBottom: 40 
   },
   totalText: {
     fontSize: 24,
@@ -115,29 +174,33 @@ const styles = StyleSheet.create({
     padding: 18,
     borderRadius: 12,
     alignItems: 'center',
-    // O segredo para o botão funcionar: garantir que ele não tenha nada na frente
     zIndex: 99, 
     elevation: 5
+  },
+  pixButtonDisabled: {
+    backgroundColor: '#95a5a6',
   },
   pixButtonText: { color: '#fff', fontWeight: 'bold', fontSize: 16 },
   qrSection: {
     marginTop: 20,
     alignItems: 'center',
-    backgroundColor: '#f9f9f9',
+    backgroundColor: '#f1f1f1',
     padding: 20,
     borderRadius: 20,
+  },
+  qrInfo: {
+    marginBottom: 10,
+    fontWeight: '600',
+    color: '#2c3e50'
   },
   qrImage: {
     width: 200,
     height: 200,
-    marginBottom: 20
+    marginBottom: 15
   },
-  doneButton: {
-    backgroundColor: '#28a745',
-    paddingVertical: 15,
-    paddingHorizontal: 50,
-    borderRadius: 30,
-    elevation: 3
-  },
-  doneButtonText: { color: '#fff', fontWeight: 'bold', fontSize: 18 },
+  enderecoEntrega: {
+    fontSize: 12,
+    color: '#7f8c8d',
+    textAlign: 'center'
+  }
 });
